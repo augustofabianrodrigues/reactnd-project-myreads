@@ -4,7 +4,7 @@
 
 .app {
   @apply w-screen;
-  @apply overflow-x-hidden;
+  @apply overflow-hidden;
   @apply bg-gray-100;
   @apply font-poppins;
   height: 100vh; /* Fallback for browsers that do not support Custom Properties */

@@ -12,10 +12,6 @@ module.exports = {
   ],
   theme: {
     extend: {
-      backgroundImage: theme => ({
-        'search-plus': "url('../icons/search-plus.svg')",
-        'search-plus-gradient': "url('../icons/search-plus-gradient.svg')"
-      }),
       fontFamily: {
         poppins: ['Poppins', 'sans-serif']
       }

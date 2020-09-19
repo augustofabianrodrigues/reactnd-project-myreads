@@ -51,10 +51,10 @@ class App extends Component {
   }
 
   render () {
-    // const { books } = this.state;
+    const { books, loading } = this.state;
     return (
       <div className="app">
-        <HomePage />
+        <HomePage books={books} loading={loading} />
       </div>
     );
   }
