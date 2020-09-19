@@ -1,26 +1,63 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react';
+import HomePage from './HomePage';
+import * as booksAPI from './booksAPI';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+function setNavigationBarHeightCSSVariable() {
+  const vh = window.innerHeight * 0.01;
+  document.documentElement.style.setProperty('--vh', vh + 'px');
+}
+
+class App extends Component {
+  state = {
+    books: [],
+    loading: false,
+    error: null
+  };
+
+  getBooksFromAPI = async () => {
+    try {
+      this.setState(() => ({
+        books: [],
+        loading: true,
+        error: null
+      }));
+
+      const books = await booksAPI.getAll();
+
+      this.setState(() => ({
+        books
+      }));
+    } catch (e) {
+      console.error(e);
+      this.setState(() => ({
+        error: e
+      }));
+    } finally {
+      this.setState(() => ({
+        loading: false
+      }));
+    }
+  };
+
+  componentDidMount () {
+    setNavigationBarHeightCSSVariable();
+    window.addEventListener('resize', setNavigationBarHeightCSSVariable);
+
+    this.getBooksFromAPI();
+  }
+
+  componentWillUnmount () {
+    window.removeEventListener('resize', setNavigationBarHeightCSSVariable);
+  }
+
+  render () {
+    // const { books } = this.state;
+    return (
+      <div className="app">
+        <HomePage />
+      </div>
+    );
+  }
 }
 
 export default App;
