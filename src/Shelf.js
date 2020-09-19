@@ -30,6 +30,7 @@ const Shelf = (props) => {
               title={book.title}
               thumbnail={book.imageLinks.thumbnail}
               authors={book.authors}
+              shelf={book.shelf}
             />
           ))}
         </div>

@@ -36,19 +36,17 @@ const HomePage = (props) => {
     })}>
       <Header />
 
-      <main className="w-full max-w-6xl mx-auto flex-grow flex-shrink-0 space-y-4 p-4 xl:py-10">
-        <div className="space-y-10">
-          {loading ? shelves.map((shelf) => (
-            <ShelfSkeletonLoader key={`${shelf.name}-skeleton-loader`} />
-          )) : shelves.map((shelf) => (
-            <Shelf
-              key={shelf.name}
-              books={books.filter((book) => book.shelf === shelf.name)}
-              icon={shelf.icon}
-              title={shelf.title}
-            />
-          ))}
-        </div>
+      <main className="relative w-full max-w-6xl mx-auto flex-grow flex-shrink-0 space-y-4 p-4 xl:py-10 space-y-10">
+        {loading ? shelves.map((shelf) => (
+          <ShelfSkeletonLoader key={`${shelf.name}-skeleton-loader`} />
+        )) : shelves.map((shelf) => (
+          <Shelf
+            key={shelf.name}
+            books={books.filter((book) => book.shelf === shelf.name)}
+            icon={shelf.icon}
+            title={shelf.title}
+          />
+        ))}
       </main>
     </div>
   );
