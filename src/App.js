@@ -7,12 +7,26 @@ function setNavigationBarHeightCSSVariable() {
   document.documentElement.style.setProperty('--vh', vh + 'px');
 }
 
-function getReplacedBookArray (books, book) {
+/**
+ * Returns a copy of the array but the book with same id, which is replaced.
+ * @param {Array} books The book array to replaced.
+ * @param {Object} book The book to be replaced for the book with same id.
+ * @param {boolean} appendMatch When set to true, a book that is matched by id will be the last one in the new array.
+ */
+function getReplacedBookArray (books, book, appendMatch = false) {
   const replaceIndex = books.findIndex(({ id }) => id === book.id);
-  if (replaceIndex === -1) return;
+  if (replaceIndex === -1) return books;
 
   const booksCopy = books.slice();
-  booksCopy.splice(replaceIndex, 1, book);
+
+  if (appendMatch) {
+    booksCopy.splice(replaceIndex, 1);
+    // Appends the book so it will appear as the last one for the shelf
+    booksCopy.push(book);
+  } else {
+    booksCopy.splice(replaceIndex, 1, book);
+  }
+
   return booksCopy;
 }
 
@@ -60,7 +74,7 @@ class App extends Component {
       this.setState((prevState) => ({
         books: getReplacedBookArray(prevState.books, {
           ...book, shelf, moving: false
-        })
+        }, true)
       }));
     } catch (e) {
       console.error(e);
