@@ -7,6 +7,15 @@ function setNavigationBarHeightCSSVariable() {
   document.documentElement.style.setProperty('--vh', vh + 'px');
 }
 
+function getReplacedBookArray (books, book) {
+  const replaceIndex = books.findIndex(({ id }) => id === book.id);
+  if (replaceIndex === -1) return;
+
+  const booksCopy = books.slice();
+  booksCopy.splice(replaceIndex, 1, book);
+  return booksCopy;
+}
+
 class App extends Component {
   state = {
     books: [],
@@ -39,6 +48,31 @@ class App extends Component {
     }
   };
 
+  handleBookMove = async (book, shelf) => {
+    this.setState((prevState) => ({
+      books: getReplacedBookArray(prevState.books, {
+        ...book, moving: true
+      })
+    }));
+
+    try {
+      await booksAPI.update(book, shelf);
+      this.setState((prevState) => ({
+        books: getReplacedBookArray(prevState.books, {
+          ...book, shelf, moving: false
+        })
+      }));
+    } catch (e) {
+      console.error(e);
+      // TODO: Display this error to the user. Maybe a toast or snackbar?
+      this.setState((prevState) => ({
+        books: getReplacedBookArray(prevState.books, {
+          ...book, moving: false
+        })
+      }));
+    }
+  };
+
   componentDidMount () {
     setNavigationBarHeightCSSVariable();
     window.addEventListener('resize', setNavigationBarHeightCSSVariable);
@@ -54,7 +88,7 @@ class App extends Component {
     const { books, loading } = this.state;
     return (
       <div className="app">
-        <HomePage books={books} loading={loading} />
+        <HomePage books={books} loading={loading} onBookMove={this.handleBookMove} />
       </div>
     );
   }

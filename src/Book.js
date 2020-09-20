@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import MoveBook from './MoveBook';
 
 const Book = (props) => {
-  const { title, thumbnail, authors, shelf } = props;
+  const { title, thumbnail, authors, shelf, moving, onMove } = props;
   const authorsNames = authors.join('; ');
 
   return (
@@ -21,7 +21,7 @@ const Book = (props) => {
             {authorsNames}
           </p>
           <div className="flex-grow flex flex-row justify-end items-end">
-            <MoveBook shelf={shelf} />
+            <MoveBook shelf={shelf} moving={moving} onMove={onMove} />
           </div>
         </div> 
       </div>
@@ -33,7 +33,9 @@ Book.propTypes = {
   title: PropTypes.string.isRequired,
   thumbnail: PropTypes.string,
   authors: PropTypes.array.isRequired,
-  shelf: PropTypes.string
+  shelf: PropTypes.string,
+  moving: PropTypes.bool.isRequired,
+  onMove: PropTypes.func.isRequired
 };
 
 export default Book;

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Book from './Book';
 
 const Shelf = (props) => {
-  const { books } = props;
+  const { books, onBookMove } = props;
 
   return (
     <div className="flex flex-col space-y-4">
@@ -31,6 +31,8 @@ const Shelf = (props) => {
               thumbnail={book.imageLinks.thumbnail}
               authors={book.authors}
               shelf={book.shelf}
+              moving={book.moving || false}
+              onMove={(shelf) => onBookMove(book, shelf)}
             />
           ))}
         </div>
@@ -42,7 +44,8 @@ const Shelf = (props) => {
 Shelf.propTypes = {
   books: PropTypes.array.isRequired,
   icon: PropTypes.element.isRequired,
-  title: PropTypes.string.isRequired
+  title: PropTypes.string.isRequired,
+  onBookMove: PropTypes.func.isRequired,
 };
 
 export default Shelf;

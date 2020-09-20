@@ -3,12 +3,12 @@ import SearchPlusIcon from './icons/SearchPlusIcon';
 
 const Header = () => {
   return (
-    <header className="h-12 sm:h-16 w-full shadow-lg sticky top-0 flex-grow-0 flex-shrink bg-gray-100 z-50">
+    <header className="h-16 w-full shadow-lg sticky top-0 flex-grow-0 flex-shrink bg-gray-100 z-50">
       <div className="h-full max-w-6xl mx-auto flex flex-row justify-between items-center">
         <div className="dummy-spacer w-10 lg:w-32 ml-4" />
 
-        <h1 className="font-serif text-purple-800 font-bold text-xl sm:text-3xl">
-          My Reads
+        <h1 className="font-serif text-purple-800 font-bold text-2xl sm:text-3xl">
+          MyReads
         </h1>
 
         <nav className="w-10 lg:w-32 mr-4">

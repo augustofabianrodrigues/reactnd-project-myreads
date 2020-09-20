@@ -27,7 +27,7 @@ const shelves = [
 ];
 
 const HomePage = (props) => {
-  const { books, loading } = props;
+  const { books, loading, onBookMove } = props;
 
   return (
     <div className={classNames('h-full w-full flex flex-col', {
@@ -45,6 +45,7 @@ const HomePage = (props) => {
             books={books.filter((book) => book.shelf === shelf.name)}
             icon={shelf.icon}
             title={shelf.title}
+            onBookMove={onBookMove}
           />
         ))}
       </main>
@@ -54,7 +55,8 @@ const HomePage = (props) => {
 
 HomePage.propTypes = {
   books: PropTypes.array.isRequired,
-  loading: PropTypes.bool.isRequired
+  loading: PropTypes.bool.isRequired,
+  onBookMove: PropTypes.func.isRequired
 };
 
 export default HomePage;
