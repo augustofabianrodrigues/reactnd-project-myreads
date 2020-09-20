@@ -31,6 +31,13 @@ const moveToOptions = [
   }
 ];
 
+// Used for keyboard navigation
+function clickListItem (e) {
+  if (e.target && e.target.click) {
+    e.target.click();
+  }
+}
+
 class MoveBook extends Component {
   constructor (props) {
     super(props);
@@ -76,6 +83,8 @@ class MoveBook extends Component {
 
       return (
         <li
+          tabIndex="0"
+          onKeyPress={clickListItem}
           key={option.name}
           className={classNames('flex flex-row items-center px-4 py-2 space-x-2', {
             'border-b border-gray-300': isLast,

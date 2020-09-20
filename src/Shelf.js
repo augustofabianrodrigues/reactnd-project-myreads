@@ -31,7 +31,7 @@ const Shelf = (props) => {
               thumbnail={book.imageLinks.thumbnail}
               authors={book.authors}
               shelf={book.shelf}
-              moving={book.moving || false}
+              moving={book.moving}
               onMove={(shelf) => onBookMove(book, shelf)}
             />
           ))}

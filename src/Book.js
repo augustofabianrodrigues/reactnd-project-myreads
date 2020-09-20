@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import MoveBook from './MoveBook';
 
 const Book = (props) => {
-  const { title, thumbnail, authors, shelf, moving, onMove } = props;
+  const { title, thumbnail, authors = [], shelf, moving = false, onMove } = props;
   const authorsNames = authors.join('; ');
 
   return (
@@ -32,9 +32,9 @@ const Book = (props) => {
 Book.propTypes = {
   title: PropTypes.string.isRequired,
   thumbnail: PropTypes.string,
-  authors: PropTypes.array.isRequired,
+  authors: PropTypes.array,
   shelf: PropTypes.string,
-  moving: PropTypes.bool.isRequired,
+  moving: PropTypes.bool,
   onMove: PropTypes.func.isRequired
 };
 

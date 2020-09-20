@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import SearchPlusIcon from './icons/SearchPlusIcon';
 
 const Header = () => {
@@ -12,15 +13,15 @@ const Header = () => {
         </h1>
 
         <nav className="w-10 lg:w-32 mr-4">
-          <a
+          <Link
             className="h-10 px-2 flex flex-row justify-end xl:justify-around items-center rounded-lg text-white invisible xl:visible bg-gradient-to-r from-purple-600 via-purple-500 to-purple-400 hover:from-purple-500 hover:via-purple-400 hover:to-purple-300 hover:shadow-sm"
-            href="/search"
+            to="/search"
           >
             <SearchPlusIcon className="w-6 h-6 visible text-purple-500 xl:text-white" />
             <span className="hidden xl:inline text-base font-bold">
               Search
             </span>
-          </a>
+          </Link>
         </nav>
       </div>
     </header>

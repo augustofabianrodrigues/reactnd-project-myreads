@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import { Route } from 'react-router-dom';
 import HomePage from './HomePage';
 import * as booksAPI from './booksAPI';
+import SearchPage from './SearchPage';
 
 function setNavigationBarHeightCSSVariable() {
   const vh = window.innerHeight * 0.01;
@@ -8,14 +10,14 @@ function setNavigationBarHeightCSSVariable() {
 }
 
 /**
- * Returns a copy of the array but the book with same id, which is replaced.
- * @param {Array} books The book array to replaced.
- * @param {Object} book The book to be replaced for the book with same id.
+ * Returns a copy of the array but the book with same id, which is replaced or added if not matched.
+ * @param {Array} books The book array to replace.
+ * @param {Object} book The book to be replaced for the book with same id or added when not matched.
  * @param {boolean} appendMatch When set to true, a book that is matched by id will be the last one in the new array.
  */
-function getReplacedBookArray (books, book, appendMatch = false) {
+function replaceOrAddToBookArray (books, book, appendMatch = false) {
   const replaceIndex = books.findIndex(({ id }) => id === book.id);
-  if (replaceIndex === -1) return books;
+  if (replaceIndex === -1) return books.concat(book);
 
   const booksCopy = books.slice();
 
@@ -27,6 +29,15 @@ function getReplacedBookArray (books, book, appendMatch = false) {
     booksCopy.splice(replaceIndex, 1, book);
   }
 
+  return booksCopy;
+}
+
+function removeFromBookArray (books, book) {
+  const removeIndex = books.findIndex(({ id }) => id === book.id);
+  if (removeIndex === -1) return books;
+
+  const booksCopy = books.slice();
+  booksCopy.splice(removeIndex, 1);
   return booksCopy;
 }
 
@@ -64,23 +75,31 @@ class App extends Component {
 
   handleBookMove = async (book, shelf) => {
     this.setState((prevState) => ({
-      books: getReplacedBookArray(prevState.books, {
+      books: replaceOrAddToBookArray(prevState.books, {
         ...book, moving: true
       })
     }));
 
     try {
       await booksAPI.update(book, shelf);
-      this.setState((prevState) => ({
-        books: getReplacedBookArray(prevState.books, {
-          ...book, shelf, moving: false
-        }, true)
-      }));
+      this.setState((prevState) => {
+        if (shelf === 'none') {
+          return {
+            books: removeFromBookArray(prevState.books, book)
+          };
+        }
+
+        return {
+          books: replaceOrAddToBookArray(prevState.books, {
+            ...book, shelf, moving: false
+          }, true)
+        };
+      });
     } catch (e) {
       console.error(e);
       // TODO: Display this error to the user. Maybe a toast or snackbar?
       this.setState((prevState) => ({
-        books: getReplacedBookArray(prevState.books, {
+        books: replaceOrAddToBookArray(prevState.books, {
           ...book, moving: false
         })
       }));
@@ -102,7 +121,28 @@ class App extends Component {
     const { books, loading } = this.state;
     return (
       <div className="app">
-        <HomePage books={books} loading={loading} onBookMove={this.handleBookMove} />
+        <Route
+          exact
+          path="/"
+          render={() => (
+            <HomePage
+              books={books}
+              loading={loading}
+              onBookMove={this.handleBookMove}
+            />
+          )}
+        />
+
+        <Route
+          path="/search"
+          render={() => (
+            <SearchPage
+              books={books}
+              loading={loading}
+              onBookMove={this.handleBookMove}
+            />
+          )}
+        />
       </div>
     );
   }
