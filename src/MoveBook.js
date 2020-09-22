@@ -46,7 +46,7 @@ class MoveBook extends Component {
   }
 
   static propTypes = {
-    shelf: PropTypes.string,
+    shelf: PropTypes.string.isRequired,
     moving: PropTypes.bool.isRequired,
     onMove: PropTypes.func.isRequired
   };
@@ -76,10 +76,10 @@ class MoveBook extends Component {
     this.props.onMove(shelf);
   };
 
-  renderAvailableOptions = (availableOptions) => {
-    return availableOptions.map((option, index) => {
+  renderMoveToOptions = (moveToOptions) => {
+    return moveToOptions.map((option, index) => {
       const isSelected = this.props.shelf === option.name;
-      const isLast = index + 1 !== availableOptions.length;
+      const isLast = index + 1 !== moveToOptions.length;
 
       return (
         <li
@@ -110,13 +110,11 @@ class MoveBook extends Component {
 
   render () {
     const { shelf, moving } = this.props;
+    const isInShelf = shelf !== 'none';
 
-    const ActionIcon = shelf ? MoveToIcon : AddToIcon;
-    const moveToLabel = shelf ? 'Move To' : 'Add To';
-    const movingLabel = shelf ? 'Moving' : 'Adding';
-
-    const availableOptions = shelf
-      ? moveToOptions : moveToOptions.slice(0, 3);
+    const ActionIcon = isInShelf ? MoveToIcon : AddToIcon;
+    const moveToLabel = isInShelf ? 'Move To' : 'Add To';
+    const movingLabel = isInShelf ? 'Moving' : 'Adding';
 
     if (moving) {
       return (
@@ -153,7 +151,7 @@ class MoveBook extends Component {
         >
           <p className="p-4 font-medium text-gray-800">{moveToLabel}...</p>
           <ul className="list-none">
-            {this.renderAvailableOptions(availableOptions)}
+            {this.renderMoveToOptions(moveToOptions)}
           </ul>
         </div>
       </div>

@@ -1,13 +1,11 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 import ArrowLeftIcon from './icons/ArrowLeftIcon';
 
 class SearchBar extends PureComponent {
   static propTypes = {
     query: PropTypes.string.isRequired,
-    searching: PropTypes.bool.isRequired,
     onSearch: PropTypes.func.isRequired
   };
 
@@ -17,7 +15,7 @@ class SearchBar extends PureComponent {
   };
 
   render () {
-    const { searching, query } = this.props;
+    const { query } = this.props;
 
     return (
       <header className="h-16 w-full shadow-lg sticky top-0 flex-grow-0 flex-shrink bg-gray-100 z-50">
@@ -38,11 +36,7 @@ class SearchBar extends PureComponent {
             placeholder="Type here"
             name="search"
             autoFocus
-            className={classNames('rounded overflow-hidden flex-grow font-medium px-4 py-2 text-2xl', {
-              'text-gray-900 bg-gray-100': !searching,
-              'text-gray-700 bg-gray-400': searching,
-            })}
-            disabled={searching}
+            className="rounded overflow-hidden flex-grow font-medium px-4 py-2 text-2xl text-gray-900 bg-gray-100"
             value={query}
             onChange={this.handleChange}
           />

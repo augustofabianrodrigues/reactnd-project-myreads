@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import * as booksAPI from './booksAPI';
@@ -6,6 +6,7 @@ import SearchBar from './SearchBar';
 import BookSkeletonLoader from './BookSkeletonLoader';
 import { debounce, isArray } from 'lodash';
 import Book from './Book';
+import BooksGrid from './BooksGrid';
 
 class SearchPage extends Component {
   static propTypes = {
@@ -15,54 +16,48 @@ class SearchPage extends Component {
   };
 
   state = {
-    hasQuery: false,
+    didSearch: false,
     searching: false,
     query: '',
-    results: [],
-    errorMessage: null
+    results: []
   };
 
   searchDebounced = debounce((query) => {
-    if (!this.state.hasQuery) return;
+    if (query.trim().length === 0) {
+      return this.setState(() => ({ didSearch: false }));
+    }
 
     this.setState(() => ({
       searching: true,
-      results: [],
-      errorMessage: null
+      results: []
     }));
 
-    booksAPI.search(query)
-      .then(results => {
-        this.setState(() => ({
-          searching: false,
-          results: isArray(results) ? results : [],
-          errorMessage: null
-        }));
-      })
+    booksAPI
+      .search(query.trimStart())
+      .then(results => 
+        this.setState(() => ({ results: isArray(results) ? results : [] }))
+      )
       .catch((e) =>
-        this.setState(() => ({
-          searching: false,
-          results: [],
-          errorMessage: e.message
-        })));
-  }, 500);
+        this.setState(() => ({ results: [] }))
+      )
+      .finally(() => 
+        this.setState(() => ({ searching: false, didSearch: true  }))
+      );
+  }, 800);
 
   handleSearch = async (query) => {
-    if (this.state.searching) return;
-    const hasQuery = String(query).trim().length !== 0;
-
-    this.setState(() => ({
-      hasQuery,
-      query
-    }));
-
+    this.setState(() => ({ query }));
     this.searchDebounced(query);
   };
 
   renderSkeletalLoader = () => {
-    return Array(10).fill().map((_, index) => (
-      <BookSkeletonLoader key={index} />
-    ));
+    return (
+      <BooksGrid>
+        {Array(10).fill().map((_, index) => (
+          <BookSkeletonLoader key={index} />
+        ))}
+      </BooksGrid>
+    );
   };
 
   renderWaitingToSearch = () => {
@@ -93,7 +88,7 @@ class SearchPage extends Component {
 
   renderResults = () => {
     return (
-      <Fragment>
+      <BooksGrid>
         {this.state.results.map((book) => {
           const match = this.props.books.find(({ id }) => id === book.id);
           book = match || book;
@@ -101,31 +96,30 @@ class SearchPage extends Component {
           return (
             <Book
               key={book.id}
-              title={book.title}
-              thumbnail={book.imageLinks.thumbnail}
-              authors={book.authors}
-              shelf={book.shelf}
-              moving={book.moving}
+              book={book}
               onMove={(shelf) => this.props.onBookMove(book, shelf)}
             />
           );
         })}
-      </Fragment>
+      </BooksGrid>
     );
   };
 
   renderMain = () => {
-    const { loading, searching, hasQuery, results } = this.state;
+    const { loading, searching, didSearch, results } = this.state;
     const loadingOrSearching = (loading || searching);
 
-    if (!hasQuery) return this.renderWaitingToSearch();
-    if (!loadingOrSearching && results.length === 0) return this.renderNothingFound();
+    if (loadingOrSearching) {
+      return this.renderSkeletalLoader();
+    }
 
-    return (
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-        {loadingOrSearching ? this.renderSkeletalLoader() : this.renderResults()}
-      </div>
-    );
+    if (!didSearch) {
+      return this.renderWaitingToSearch();
+    }
+
+    return results.length === 0 ?
+      this.renderNothingFound() :
+      this.renderResults();
   };
 
   render () {
@@ -137,7 +131,7 @@ class SearchPage extends Component {
         'overflow-hidden': loadingOrSearching,
         'overflow-y-auto': !loadingOrSearching
       })}>
-        <SearchBar query={query} searching={loadingOrSearching} onSearch={this.handleSearch} />
+        <SearchBar query={query} onSearch={this.handleSearch} />
         <main className="relative w-full max-w-6xl mx-auto flex-grow flex-shrink-0 p-4 xl:py-10">
           {this.renderMain()}
         </main>

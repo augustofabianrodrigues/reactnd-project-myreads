@@ -2,8 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import MoveBook from './MoveBook';
 
+const noThumbnail = require('./illustrations/no-thumbnail.svg');
+
 const Book = (props) => {
-  const { title, thumbnail, authors = [], shelf, moving = false, onMove } = props;
+  const {
+    title,
+    imageLinks: {
+      thumbnail = noThumbnail
+    } = {},
+    authors = [],
+    shelf = 'none',
+    moving = false
+  } = props.book;
+
   const authorsNames = authors.join('; ');
 
   return (
@@ -21,7 +32,7 @@ const Book = (props) => {
             {authorsNames}
           </p>
           <div className="flex-grow flex flex-row justify-end items-end">
-            <MoveBook shelf={shelf} moving={moving} onMove={onMove} />
+            <MoveBook shelf={shelf} moving={moving} onMove={props.onMove} />
           </div>
         </div> 
       </div>
@@ -30,11 +41,7 @@ const Book = (props) => {
 };
 
 Book.propTypes = {
-  title: PropTypes.string.isRequired,
-  thumbnail: PropTypes.string,
-  authors: PropTypes.array,
-  shelf: PropTypes.string,
-  moving: PropTypes.bool,
+  book: PropTypes.object.isRequired,
   onMove: PropTypes.func.isRequired
 };
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Book from './Book';
+import BooksGrid from './BooksGrid';
 
 const Shelf = (props) => {
   const { books, onBookMove } = props;
@@ -23,19 +24,15 @@ const Shelf = (props) => {
           Nothing here
         </p>
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+        <BooksGrid>
           {books.map((book) => (
             <Book
               key={book.id}
-              title={book.title}
-              thumbnail={book.imageLinks.thumbnail}
-              authors={book.authors}
-              shelf={book.shelf}
-              moving={book.moving}
+              book={book}
               onMove={(shelf) => onBookMove(book, shelf)}
             />
           ))}
-        </div>
+        </BooksGrid>
       )}
     </div>
   );

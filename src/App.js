@@ -44,27 +44,20 @@ function removeFromBookArray (books, book) {
 class App extends Component {
   state = {
     books: [],
-    loading: false,
-    error: null
+    loading: false
   };
 
   getBooksFromAPI = async () => {
     try {
       this.setState(() => ({
         books: [],
-        loading: true,
-        error: null
+        loading: true
       }));
 
       const books = await booksAPI.getAll();
 
       this.setState(() => ({
         books
-      }));
-    } catch (e) {
-      console.error(e);
-      this.setState(() => ({
-        error: e
       }));
     } finally {
       this.setState(() => ({
@@ -97,7 +90,6 @@ class App extends Component {
       });
     } catch (e) {
       console.error(e);
-      // TODO: Display this error to the user. Maybe a toast or snackbar?
       this.setState((prevState) => ({
         books: replaceOrAddToBookArray(prevState.books, {
           ...book, moving: false

@@ -1,4 +1,5 @@
 import React from 'react';
+import BooksGrid from './BooksGrid';
 import BookSkeletonLoader from './BookSkeletonLoader';
 
 const ShelfSkeletonLoader = () => {
@@ -9,10 +10,10 @@ const ShelfSkeletonLoader = () => {
         <div className="h-6 bg-gray-400 rounded my-auto flex-grow md:max-w-2xl" />
       </div>
       <hr />
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+      <BooksGrid>
         <BookSkeletonLoader />
         <BookSkeletonLoader />
-      </div>
+      </BooksGrid>
     </div>
   );
 };
