@@ -26,8 +26,6 @@ If you opted out of Yarn run:
 npm install
 ```
 
-A browser window should popup. You can also navigate to <http://localhost:3000>.
-
 After the packages are installed run:
 
 ```shell
@@ -39,6 +37,8 @@ or with npm:
 ```shell
 npm start
 ```
+
+A browser window should popup. You can also navigate to <http://localhost:3000>.
 
 ## Available Scripts
 
