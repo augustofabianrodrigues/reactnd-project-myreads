@@ -8,9 +8,37 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Setup
 
-Install [Node.js](https://nodejs.org/en/) and [Yarn](https://yarnpkg.com/);
+Install [Node.js](https://nodejs.org/en/) and then install [Yarn](https://yarnpkg.com/);
 
-> Installing yarn isn't required, **using npm instead is fine**. However if you wish to use npm, just delete the **yarn.lock** file and you're good to go.
+> Installing Yarn isn't required, **using npm instead is fine**. However if you wish to use npm, just delete the **yarn.lock** file and you're good to go.
+
+## Running
+
+After installing Node.js and Yarn, run:
+
+```shell
+yarn
+```
+
+If you opted out of Yarn run:
+
+```shell
+npm install
+```
+
+A browser window should popup. You can also navigate to <http://localhost:3000>.
+
+After the packages are installed run:
+
+```shell
+yarn start
+```
+
+or with npm:
+
+```shell
+npm start
+```
 
 ## Available Scripts
 
